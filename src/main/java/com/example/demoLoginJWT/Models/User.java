@@ -11,6 +11,7 @@ public class User {
     private String password;
     private Rol rol;
     private Long dni;
+    private String email;
 
     public String getId() {
         return id;
@@ -52,14 +53,23 @@ public class User {
         this.dni = dni;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public User() {
     }
 
-    public User(String id, String username, String password, Rol rol, Long dni) {
+    public User(String id, String username, String password, Rol rol, Long dni, String email) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.rol = rol;
         this.dni = dni;
+        this.email = email;
     }
 }

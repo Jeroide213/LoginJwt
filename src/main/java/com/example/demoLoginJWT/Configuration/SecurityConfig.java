@@ -27,8 +27,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("alumno").password("{noop}alumno").roles("ALUMNO")
+                .and()
+                .withUser("profesor").password("{noop}profesor").roles("PROFESOR")
+                .and()
+                .withUser("directivo").password("{noop}directivo").roles("DIRECTIVO");
+
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,8 +44,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/api/signup").permitAll()
+                .antMatchers("/alumnos/**").hasRole("ALUMNO")
+                .antMatchers("/profesores/**").hasRole("PROFESOR")
+                .antMatchers("/directivos/**").hasRole("DIRECTIVO")
                 .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .logout()
                 .and()
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
+
 }
